@@ -389,7 +389,7 @@
     }
 
     function showFullReport() {
-        let h = "<h3>🔍 Raport Pariuri</h3><button onclick='window.print()' class='no-print' style='background:#f39c12; margin-bottom:10px;'>💾 Print</button><div class='table-responsive'><table><thead><tr class='blue-head'><th>User</th><th>Meci</th><th>Scor</th><th>Pron</th><th>Pen</th></tr></thead>";
+        let h = "<h3>🔍 Raport Pariuri</h3><button onclick='window.print()' class='no-print' style='background:#f39c12; margin-bottom:10px;'>💾 Print/PDF</button><div class='table-responsive'><table><thead><tr class='blue-head'><th>User</th><th>Meci</th><th>Scor</th><th>Pron</th><th>Pen</th></tr></thead>";
         users.forEach(u => Object.keys(u.bets).forEach(mId => {
             const m = matches.find(x => x.id == mId), b = u.bets[mId];
             h += `<tr><td>${u.fullName}</td><td>${m.name}</td><td>${b.home}-${b.away}</td><td>${b.sign}</td><td>${b.penalty}</td></tr>`;
@@ -399,7 +399,7 @@
     }
 
     function exportFullClasament() {
-        let h = "<h3>🏆 Clasament General</h3><button onclick='window.print()' class='no-print' style='background:#f39c12; margin-bottom:10px;'>💾 Print</button><div class='table-responsive'><table><thead><tr class='blue-head'><th>Loc</th><th>Nume</th><th>Puncte</th><th>Scor</th><th>Pron</th><th>Pen</th></tr></thead>";
+        let h = "<h3>🏆 Clasament General</h3><button onclick='window.print()' class='no-print' style='background:#f39c12; margin-bottom:10px;'>💾 Print/PDF</button><div class='table-responsive'><table><thead><tr class='blue-head'><th>Loc</th><th>Nume</th><th>Puncte</th><th>Scor</th><th>Pron</th><th>Pen</th></tr></thead>";
         const sorted = [...users].sort((a,b) => {
             if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
             if (b.scorePoints !== a.scorePoints) return b.scorePoints - a.scorePoints;
@@ -435,3 +435,4 @@
 </body>
 
 </html>
+
