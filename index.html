@@ -166,6 +166,7 @@
     <div class="section">
         <h2>📊 Clasament Live</h2>
         <input type="text" id="searchBox" placeholder="🔍 Caută utilizator..." onkeyup="searchUser()" style="border: 2px solid #1e3799;">
+        <p style="font-size: 10px;">Pentru detalii click pe numele utilizatorului</p>
         <div class="table-responsive">
             <table id="leaderboard">
                 <thead><tr class="blue-head"><th>Loc</th><th>Nume</th><th>Tot Pct</th><th>Scor</th><th>Pron</th><th>Pen</th></tr></thead>
@@ -371,7 +372,7 @@
 
     function showUserDetails(un) {
         const u = users.find(x => x.username === un);
-        let h = `<h3>Analiză: ${u.fullName}</h3><button onclick="window.print()" class="no-print" style="background:#f39c12; margin-bottom:10px;">💾 Print PDF</button><div class="table-responsive"><table class="user-analysis-table"><thead><tr><th class="blue-head">Meci</th><th class="blue-head">Real</th><th class="blue-head">Scor</th><th class="blue-head">Pron</th><th class="blue-head">Pen</th><th class="blue-head">Pts</th></tr></thead><tbody>`;
+        let h = `<h3>Analiză: ${u.fullName}</h3><button onclick="window.print()" class="no-print" style="background:#f39c12; margin-bottom:10px;">💾 Print/PDF</button><div class="table-responsive"><table class="user-analysis-table"><thead><tr><th class="blue-head">Meci</th><th class="blue-head">Real</th><th class="blue-head">Scor</th><th class="blue-head">Pron</th><th class="blue-head">Pen</th><th class="blue-head">Pts</th></tr></thead><tbody>`;
         matches.forEach(m => {
             const b = u.bets[m.id];
             if(b) {
@@ -435,4 +436,5 @@
 </body>
 
 </html>
+
 
