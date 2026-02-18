@@ -31,7 +31,6 @@
         
         th:nth-child(2), td:nth-child(2) { min-width: 150px; text-align: left; }
 
-        /* Stiluri specifice pentru tabelul de analiză utilizator */
         .user-analysis-table th:nth-child(1), .user-analysis-table td:nth-child(1) { width: auto; text-align: left; }
         .user-analysis-table th:nth-child(2), .user-analysis-table td:nth-child(2) { width: 1%; white-space: nowrap; text-align: center; min-width: 60px; }
 
@@ -184,9 +183,9 @@
 </div>
 
 <script>
-    const BIN_ID = '6993982bd0ea881f40bfb5ec'; 
-    const API_KEY = '$2a$10$xgQ/MpgLbr1aHYrIDEFowea8adWq3rtRV4yeM8Pwhzu9pRJNR5lMe';
-    const CLOUD_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+    // CONFIGURARE SUPABASE
+    const SB_URL = "https://urjuiyjjzcyqcovljche.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVyanVpeWpqemN5cWNvdmxqY2hlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MDcyMDgsImV4cCI6MjA4Njk4MzIwOH0.ZIzjrs3blK89vMu5JFH5N0EtNZmyaUkLwi-03CXZo6w";
 
     let users = [], matches = [], logs = [], currentUser = null;
 
@@ -198,15 +197,30 @@
 
     async function loadFromCloud() {
         try {
-            const res = await fetch(`${CLOUD_URL}/latest`, { headers: { 'X-Master-Key': API_KEY } });
+            // Citim rândul cu id=1 din tabelul date_pariuri
+            const res = await fetch(`${SB_URL}/rest/v1/date_pariuri?id=eq.1&select=continut`, { 
+                headers: { 
+                    'apikey': SB_KEY,
+                    'Authorization': `Bearer ${SB_KEY}`
+                } 
+            });
             const d = await res.json();
-            users = d.record.users || [];
-            matches = d.record.matches || [];
-            logs = d.record.logs || [];
-            document.getElementById('cloudStatus').innerText = "✅ Conectat";
-            checkPersistentLogin();
-            if(currentUser) showApp();
-        } catch (e) { document.getElementById('cloudStatus').innerText = "❌ Eroare Bin"; }
+            
+            if (d && d.length > 0) {
+                const record = d[0].continut;
+                users = record.users || [];
+                matches = record.matches || [];
+                logs = record.logs || [];
+                document.getElementById('cloudStatus').innerText = "✅ Conectat (Supabase)";
+                checkPersistentLogin();
+                if(currentUser) showApp();
+            } else {
+                document.getElementById('cloudStatus').innerText = "⚠️ Tabel gol";
+            }
+        } catch (e) { 
+            console.error(e);
+            document.getElementById('cloudStatus').innerText = "❌ Eroare Supabase"; 
+        }
     }
 
     async function saveToCloud(msg) {
@@ -215,14 +229,24 @@
             if (logs.length > 100) logs = logs.slice(0, 100);
         }
         try {
-            await fetch(CLOUD_URL, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-                body: JSON.stringify({ users, matches, logs })
+            // Actualizăm rândul cu id=1 folosind PATCH
+            await fetch(`${SB_URL}/rest/v1/date_pariuri?id=eq.1`, {
+                method: 'PATCH',
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'apikey': SB_KEY,
+                    'Authorization': `Bearer ${SB_KEY}`,
+                    'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({ 
+                    continut: { users, matches, logs } 
+                })
             });
             calculateScores();
             updateAdminUserList();
-        } catch (e) { console.error("Eroare salvare cloud"); }
+        } catch (e) { 
+            console.error("Eroare salvare Supabase", e); 
+        }
     }
 
     function checkPersistentLogin() {
@@ -434,9 +458,4 @@
     loadFromCloud();
 </script>
 </body>
-
 </html>
-
-
-
-
