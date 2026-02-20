@@ -8,55 +8,39 @@
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #c9c9c9; margin: 0; padding: 10px; }
         .container { max-width: 1200px; margin: auto; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        
         .auth-screen { max-width: 400px; margin: 50px auto; padding: 25px; border-radius: 12px; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .hidden { display: none !important; }
-
         h1, h2, h3 { color: #1e3799; text-align: center; margin-top: 0; }
         .section { margin-bottom: 15px; padding: 15px; border: 1px solid #dcdde1; border-radius: 10px; background-color: #fff; }
-        
         #cloudStatus { text-align: center; font-size: 0.8rem; margin-bottom: 10px; font-weight: bold; }
-
         .input-group-container { display: flex; flex-direction: column; gap: 15px; }
         @media (min-width: 768px) { .input-group-container { flex-direction: row; } .input-box { flex: 1; } }
-
         .input-box { border: 1px solid #eee; padding: 12px; border-radius: 8px; position: relative; }
         .locked-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.92); z-index: 10; border-radius: 8px; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-weight: bold; color: #d35400; }
-
         label { display: block; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 5px; margin-top: 5px; }
-
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; border-radius: 8px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; table-layout: auto; min-width: 400px; }
         th, td { border: 1px solid #dcdde1; padding: 10px; text-align: center; }
-        
         th:nth-child(2), td:nth-child(2) { min-width: 150px; text-align: left; }
-
         .user-analysis-table th:nth-child(1), .user-analysis-table td:nth-child(1) { width: auto; text-align: left; }
         .user-analysis-table th:nth-child(2), .user-analysis-table td:nth-child(2) { width: 1%; white-space: nowrap; text-align: center; min-width: 60px; }
-
         .blue-head { background-color: #1e3799 !important; color: white !important; }
         .real-cell { background-color: #f1f2f6 !important; font-weight: bold; }
         .win-cell { background-color: #c8e6c9 !important; font-weight: bold; color: #1b5e20; }
-
         input, select { padding: 12px; border: 1px solid #b2bec3; border-radius: 6px; width: 100%; margin-bottom: 10px; background-color: #f8f9fa; }
         .score-inputs { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px; }
         input[type="number"] { width: 70px !important; text-align: center; margin-bottom: 0; }
-
         button { background-color: #38ada9; color: white; padding: 12px; border: none; cursor: pointer; border-radius: 6px; font-weight: bold; width: 100%; margin-top: 5px; }
         .btn-danger { background-color: #eb4d4b; }
         .btn-secondary { background-color: #636e72; }
-        
         .user-link { color: #0c2461; cursor: pointer; text-decoration: underline; font-weight: bold; display: block; }
         #modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); overflow-y: auto; padding: 15px; }
         .modal-content { background: white; margin: 20px auto; padding: 20px; width: 100%; max-width: 900px; border-radius: 12px; position: relative; }
         .close-btn { position: absolute; right: 20px; top: 15px; font-size: 30px; cursor: pointer; color: #333; }
-
         #toast { visibility: hidden; min-width: 250px; background-color: #27ae60; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%); font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 1.5s; }
-
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-
         @media print {
             body * { visibility: hidden !important; }
             #modal, #modal *, #userDetailsContent, #userDetailsContent * { visibility: visible !important; }
@@ -67,7 +51,6 @@
             .real-cell { background-color: #f1f2f6 !important; -webkit-print-color-adjust: exact; }
             .win-cell { background-color: #c8e6c9 !important; -webkit-print-color-adjust: exact; }
         }
-        
         .remember-container { display: flex; align-items: center; gap: 8px; margin: 10px 0; font-size: 0.9rem; }
         .remember-container input { width: auto; margin-bottom: 0; cursor: pointer; }
         .remember-container label { cursor: pointer; margin: 0; }
@@ -114,43 +97,33 @@
         <div id="adminScoreSection" class="input-box hidden">
             <div id="adminLocked" class="locked-overlay">🔒 SCOR FINAL SALVAT</div>
             <h2>⚽ Scor Real (Admin)</h2>
-            
             <label>Meci:</label>
             <select id="matchSelectAdmin" onchange="checkAdminLock()"></select>
-            
             <label>Scor:</label>
             <div class="score-inputs">
                 <input type="number" id="realHome" value="0"> : <input type="number" id="realAway" value="0">
             </div>
-            
             <label>Penalty? DA/NU:</label>
             <select id="realPenalty"><option value="NU">NU</option><option value="DA">DA</option></select>
-            
             <button onclick="updateMatchResult()" class="btn-danger">Salvează Rezultat</button>
         </div>
 
         <div class="input-box" id="betBox">
             <div id="betLocked" class="locked-overlay">🔒 PARIU DEJA SALVAT</div>
             <h2>🍀 Implementare Pariu</h2>
-            
             <label>Utilizator:</label>
             <input type="text" id="displayFullUser" readonly style="background-color: #eee;">
-
             <label>Meci:</label>
             <select id="matchSelectUser" onchange="checkUserLock()"></select>
-            
             <label>Scor:</label>
             <div class="score-inputs">
                 <input type="number" id="betHome" value="0" oninput="autoSelectSign()"> : 
                 <input type="number" id="betAway" value="0" oninput="autoSelectSign()">
             </div>
-            
             <label>Pronostic (1, X sau 2):</label>
             <select id="betSign"><option value="1">1</option><option value="X" selected>X</option><option value="2">2</option></select>
-            
             <label>Penalty? DA/NU:</label>
             <select id="betPenalty"><option value="NU">NU</option><option value="DA">DA</option></select>
-            
             <button onclick="placeBet()">Salvează & Următorul</button>
         </div>
     </div>
@@ -183,7 +156,10 @@
 </div>
 
 <script>
-    // CONFIGURARE SUPABASE
+    // --- CONFIGURARE ASCUNDERE UTILIZATORI ---
+    // Adaugă aici username-ul celui pe care vrei să îl ascunzi. Exemplu: ["secret_user", "test_user"]
+    const HIDDEN_USERS = ["admin"]; 
+
     const SB_URL = "https://urjuiyjjzcyqcovljche.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVyanVpeWpqemN5cWNvdmxqY2hlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MDcyMDgsImV4cCI6MjA4Njk4MzIwOH0.ZIzjrs3blK89vMu5JFH5N0EtNZmyaUkLwi-03CXZo6w";
 
@@ -197,15 +173,10 @@
 
     async function loadFromCloud() {
         try {
-            // Citim rândul cu id=1 din tabelul date_pariuri
             const res = await fetch(`${SB_URL}/rest/v1/date_pariuri?id=eq.1&select=continut`, { 
-                headers: { 
-                    'apikey': SB_KEY,
-                    'Authorization': `Bearer ${SB_KEY}`
-                } 
+                headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } 
             });
             const d = await res.json();
-            
             if (d && d.length > 0) {
                 const record = d[0].continut;
                 users = record.users || [];
@@ -229,7 +200,6 @@
             if (logs.length > 100) logs = logs.slice(0, 100);
         }
         try {
-            // Actualizăm rândul cu id=1 folosind PATCH
             await fetch(`${SB_URL}/rest/v1/date_pariuri?id=eq.1`, {
                 method: 'PATCH',
                 headers: { 
@@ -238,15 +208,11 @@
                     'Authorization': `Bearer ${SB_KEY}`,
                     'Prefer': 'return=minimal'
                 },
-                body: JSON.stringify({ 
-                    continut: { users, matches, logs } 
-                })
+                body: JSON.stringify({ continut: { users, matches, logs } })
             });
             calculateScores();
             updateAdminUserList();
-        } catch (e) { 
-            console.error("Eroare salvare Supabase", e); 
-        }
+        } catch (e) { console.error("Eroare salvare Supabase", e); }
     }
 
     function checkPersistentLogin() {
@@ -278,7 +244,6 @@
     }
 
     function handleLogout() { localStorage.removeItem('betAppUser'); location.reload(); }
-
     function toggleAuth(isLogin) {
         document.getElementById('loginFields').classList.toggle('hidden', !isLogin);
         document.getElementById('registerFields').classList.toggle('hidden', isLogin);
@@ -298,9 +263,7 @@
         const isAdmin = currentUser.role === "admin";
         document.getElementById('adminUserSection').classList.toggle('hidden', !isAdmin);
         document.getElementById('adminScoreSection').classList.toggle('hidden', !isAdmin);
-        
         if (isAdmin) updateAdminUserList();
-
         const h = matches.map(m => `<option value="${m.id}">${m.id}. ${m.name}</option>`).join('');
         document.getElementById('matchSelectAdmin').innerHTML = h;
         document.getElementById('matchSelectUser').innerHTML = h;
@@ -384,12 +347,15 @@
         renderLeaderboard();
     }
 
+    // MODIFICAT: Filtrare utilizatori ascunși în clasament
     function renderLeaderboard() {
-        const sorted = [...users].sort((a,b) => {
-            if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
-            if (b.scorePoints !== a.scorePoints) return b.scorePoints - a.scorePoints;
-            return b.penaltyPoints - a.penaltyPoints;
-        });
+        const sorted = users
+            .filter(u => !HIDDEN_USERS.includes(u.username))
+            .sort((a,b) => {
+                if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+                if (b.scorePoints !== a.scorePoints) return b.scorePoints - a.scorePoints;
+                return b.penaltyPoints - a.penaltyPoints;
+            });
         document.querySelector('#leaderboard tbody').innerHTML = sorted.map((u, i) => `
             <tr><td>${i+1}</td><td><span class="user-link" onclick="showUserDetails('${u.username}')">${u.fullName}</span></td><td><strong>${u.totalPoints}</strong></td><td>${u.scorePoints}</td><td>${u.signPoints}</td><td>${u.penaltyPoints}</td></tr>`).join('');
     }
@@ -413,23 +379,29 @@
         document.getElementById('modal').style.display = "block";
     }
 
+    // MODIFICAT: Filtrare utilizatori ascunși în raportul general de pariuri
     function showFullReport() {
         let h = "<h3>🔍 Raport Pariuri</h3><button onclick='window.print()' class='no-print' style='background:#f39c12; margin-bottom:10px;'>💾 Print/PDF</button><div class='table-responsive'><table><thead><tr class='blue-head'><th>User</th><th>Meci</th><th>Scor</th><th>Pron</th><th>Pen</th></tr></thead>";
-        users.forEach(u => Object.keys(u.bets).forEach(mId => {
-            const m = matches.find(x => x.id == mId), b = u.bets[mId];
-            h += `<tr><td>${u.fullName}</td><td>${m.name}</td><td>${b.home}-${b.away}</td><td>${b.sign}</td><td>${b.penalty}</td></tr>`;
-        }));
+        users.filter(u => !HIDDEN_USERS.includes(u.username)).forEach(u => {
+            Object.keys(u.bets).forEach(mId => {
+                const m = matches.find(x => x.id == mId), b = u.bets[mId];
+                h += `<tr><td>${u.fullName}</td><td>${m.name}</td><td>${b.home}-${b.away}</td><td>${b.sign}</td><td>${b.penalty}</td></tr>`;
+            });
+        });
         document.getElementById('userDetailsContent').innerHTML = h + "</table></div>";
         document.getElementById('modal').style.display = 'block';
     }
 
+    // MODIFICAT: Filtrare utilizatori ascunși în exportul de clasament
     function exportFullClasament() {
         let h = "<h3>🏆 Clasament General</h3><button onclick='window.print()' class='no-print' style='background:#f39c12; margin-bottom:10px;'>💾 Print/PDF</button><div class='table-responsive'><table><thead><tr class='blue-head'><th>Loc</th><th>Nume</th><th>Puncte</th><th>Scor</th><th>Pron</th><th>Pen</th></tr></thead>";
-        const sorted = [...users].sort((a,b) => {
-            if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
-            if (b.scorePoints !== a.scorePoints) return b.scorePoints - a.scorePoints;
-            return b.penaltyPoints - a.penaltyPoints;
-        });
+        const sorted = users
+            .filter(u => !HIDDEN_USERS.includes(u.username))
+            .sort((a,b) => {
+                if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+                if (b.scorePoints !== a.scorePoints) return b.scorePoints - a.scorePoints;
+                return b.penaltyPoints - a.penaltyPoints;
+            });
         sorted.forEach((u, i) => h += `<tr><td>${i+1}</td><td>${u.fullName}</td><td>${u.totalPoints}</td><td>${u.scorePoints}</td><td>${u.signPoints}</td><td>${u.penaltyPoints}</td></tr>`);
         document.getElementById('userDetailsContent').innerHTML = h + "</table></div>";
         document.getElementById('modal').style.display = 'block';
