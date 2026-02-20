@@ -182,7 +182,7 @@
                 users = record.users || [];
                 matches = record.matches || [];
                 logs = record.logs || [];
-                document.getElementById('cloudStatus').innerText = "✅ Conectat (Supabase)";
+                document.getElementById('cloudStatus').innerText = "✅ Conectat";
                 checkPersistentLogin();
                 if(currentUser) showApp();
             } else {
@@ -190,7 +190,7 @@
             }
         } catch (e) { 
             console.error(e);
-            document.getElementById('cloudStatus').innerText = "❌ Eroare Supabase"; 
+            document.getElementById('cloudStatus').innerText = "❌ Eroare Conectare"; 
         }
     }
 
@@ -431,3 +431,4 @@
 </script>
 </body>
 </html>
+
