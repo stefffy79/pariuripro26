@@ -1,0 +1,25 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main  # sau numele branch-ului tău principal
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Inject Secrets into HTML
+        run: |
+          # Înlocuim placeholder-ele din index.html cu valorile din GitHub Secrets
+          sed -i "s|___SUPABASE_URL___|${{ secrets.MY_SUPABASE_URL }}|g" index.html
+          sed -i "s|___SUPABASE_KEY___|${{ secrets.MY_SUPABASE_KEY }}|g" index.html
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: . # folderul unde e index.html
+          branch: gh-pages # branch-ul de unde se va servi site-ul
