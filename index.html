@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pariuri Pro CM 2026</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #c9c9c9; margin: 0; padding: 10px; }
+        .container { max-width: 1200px; margin: auto; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .auth-screen { max-width: 400px; margin: 50px auto; padding: 25px; border-radius: 12px; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .hidden { display: none !important; }
+        h1, h2, h3 { color: #1e3799; text-align: center; margin-top: 0; }
+        .section { margin-bottom: 15px; padding: 15px; border: 1px solid #dcdde1; border-radius: 10px; background-color: #fff; }
+        #cloudStatus { text-align: center; font-size: 0.8rem; margin-bottom: 10px; font-weight: bold; }
+        .input-group-container { display: flex; flex-direction: column; gap: 15px; }
+        @media (min-width: 768px) { .input-group-container { flex-direction: row; } .input-box { flex: 1; } }
+        .input-box { border: 1px solid #eee; padding: 12px; border-radius: 8px; position: relative; }
+        .locked-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.92); z-index: 10; border-radius: 8px; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-weight: bold; color: #d35400; }
+        label { display: block; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 5px; margin-top: 5px; }
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; table-layout: auto; min-width: 400px; }
+        th, td { border: 1px solid #dcdde1; padding: 10px; text-align: center; }
+        th:nth-child(2), td:nth-child(2) { min-width: 150px; text-align: left; }
+        .user-analysis-table th:nth-child(1), .user-analysis-table td:nth-child(1) { width: auto; text-align: left; }
+        .user-analysis-table th:nth-child(2), .user-analysis-table td:nth-child(2) { width: 1%; white-space: nowrap; text-align: center; min-width: 60px; }
+        .blue-head { background-color: #1e3799 !important; color: white !important; }
+        .real-cell { background-color: #f1f2f6 !important; font-weight: bold; }
+        .win-cell { background-color: #c8e6c9 !important; font-weight: bold; color: #1b5e20; }
+        input, select { padding: 12px; border: 1px solid #b2bec3; border-radius: 6px; width: 100%; margin-bottom: 10px; background-color: #f8f9fa; }
+        .score-inputs { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px; }
+        input[type="number"] { width: 70px !important; text-align: center; margin-bottom: 0; }
+        button { background-color: #38ada9; color: white; padding: 12px; border: none; cursor: pointer; border-radius: 6px; font-weight: bold; width: 100%; margin-top: 5px; }
+        .btn-danger { background-color: #eb4d4b; }
+        .btn-secondary { background-color: #636e72; }
+        .user-link { color: #0c2461; cursor: pointer; text-decoration: underline; font-weight: bold; display: block; }
+        #modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); overflow-y: auto; padding: 15px; }
+        .modal-content { background: white; margin: 20px auto; padding: 20px; width: 100%; max-width: 900px; border-radius: 12px; position: relative; }
+        .close-btn { position: absolute; right: 20px; top: 15px; font-size: 30px; cursor: pointer; color: #333; }
+        #toast { visibility: hidden; min-width: 250px; background-color: #27ae60; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%); font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 1.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        @media print {
+            body * { visibility: hidden !important; }
+            #modal, #modal *, #userDetailsContent, #userDetailsContent * { visibility: visible !important; }
+            #modal { position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; background: white !important; display: block !important; }
+            .modal-content { border: none !important; box-shadow: none !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
+            .no-print { display: none !important; }
+            th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .real-cell { background-color: #f1f2f6 !important; -webkit-print-color-adjust: exact; }
+            .win-cell { background-color: #c8e6c9 !important; -webkit-print-color-adjust: exact; }
+        }
+        .remember-container { display: flex; align-items: center; gap: 8px; margin: 10px 0; font-size: 0.9rem; }
+        .remember-container input { width: auto; margin-bottom: 0; cursor: pointer; }
+        .remember-container label { cursor: pointer; margin: 0; }
+    </style>
+</head>
+<body>
+
+<div id="toast">✅ Date salvate cu succes!</div>
+
+<div id="authScreen" class="auth-screen">
+    <h1 id="authTitle">Autentificare</h1>
+    <div id="loginFields">
+        <input type="text" id="loginUser" placeholder="Username">
+        <input type="password" id="loginPass" placeholder="Parolă">
+        <div class="remember-container">
+            <input type="checkbox" id="rememberMe"> 
+            <label for="rememberMe">Rămâi logat</label>
+        </div>
+        <button onclick="handleLogin()">Intră în cont</button>
+        <p style="text-align:center">Nu ai cont? <a href="#" onclick="toggleAuth(false)">Înregistrare</a></p>
+    </div>
+    <div id="registerFields" class="hidden">
+        <input type="text" id="regFull" placeholder="Nume Complet">
+        <input type="text" id="regUser" placeholder="Username">
+        <input type="password" id="regPass" placeholder="Parolă">
+        <button onclick="handleRegister()" style="background-color: #1e3799;">Creează Cont</button>
+        <p style="text-align:center">Ai cont? <a href="#" onclick="toggleAuth(true)">Login</a></p>
+    </div>
+</div>
+
+<div id="appScreen" class="container hidden">
+    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <span id="welcomeMsg" style="font-weight:bold; color:#1e3799;"></span>
+        <button onclick="handleLogout()" style="width:auto; padding:5px 12px; margin:0;" class="btn-secondary">Logout</button>
+    </div>
+    <div id="cloudStatus">Sincronizare...</div>
+
+    <div id="adminUserSection" class="section hidden">
+        <h3>🛠️ Gestiune Utilizatori</h3>
+        <div id="manageUsersList" style="max-height:150px; overflow-y:auto; border:1px solid #eee; padding: 5px; border-radius: 8px;"></div>
+    </div>
+
+    <div class="input-group-container">
+        <div id="adminScoreSection" class="input-box hidden">
+            <div id="adminLocked" class="locked-overlay">🔒 SCOR FINAL SALVAT</div>
+            <h2>⚽ Scor Real (Admin)</h2>
+            <label>Meci:</label>
+            <select id="matchSelectAdmin" onchange="checkAdminLock()"></select>
+            <label>Scor:</label>
+            <div class="score-inputs">
+                <input type="number" id="realHome" value="0"> : <input type="number" id="realAway" value="0">
+            </div>
+            <label>Penalty? DA/NU:</label>
+            <select id="realPenalty"><option value="NU">NU</option><option value="DA">DA</option></select>
+            <button onclick="updateMatchResult()" class="btn-danger">Salvează Rezultat</button>
+        </div>
+
+        <div class="input-box" id="betBox">
+            <div id="betLocked" class="locked-overlay">🔒 PARIU DEJA SALVAT</div>
+            <h2>🍀 Implementare Pariu</h2>
+            <label>Utilizator:</label>
+            <input type="text" id="displayFullUser" readonly style="background-color: #eee;">
+            <label>Meci:</label>
+            <select id="matchSelectUser" onchange="checkUserLock()"></select>
+            <label>Scor:</label>
+            <div class="score-inputs">
+                <input type="number" id="betHome" value="0" oninput="autoSelectSign()"> : 
+                <input type="number" id="betAway" value="0" oninput="autoSelectSign()">
+            </div>
+            <label>Pronostic (1, X sau 2):</label>
+            <select id="betSign"><option value="1">1</option><option value="X" selected>X</option><option value="2">2</option></select>
+            <label>Penalty? DA/NU:</label>
+            <select id="betPenalty"><option value="NU">NU</option><option value="DA">DA</option></select>
+            <button onclick="placeBet()">Salvează & Următorul</button>
+        </div>
+    </div>
+
+    <div class="section" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <button onclick="showSavedScores()" style="background-color: #27ae60;">✅ Rezultate</button>
+        <button onclick="showFullReport()" style="background-color: #6c5ce7;">🔍 Pariuri</button>
+        <button onclick="showLogs()" style="background-color: #2f3542;">📜 Jurnal</button>
+        <button onclick="exportFullClasament()" style="background-color: #f39c12;">📤 Export Listă</button>
+    </div>
+
+    <div class="section">
+        <h2>📊 Clasament </h2>
+        <input type="text" id="searchBox" placeholder="🔍 Caută utilizator..." onkeyup="searchUser()" style="border: 2px solid #1e3799;">
+        <p style="font-size: 12px;">Pentru detalii click pe numele utilizatorului 👇</p>
+        <div class="table-responsive">
+            <table id="leaderboard">
+                <thead><tr class="blue-head"><th>Loc</th><th>Nume</th><th>Tot Pct</th><th>Scor</th><th>Pron</th><th>Pen</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">×</span>
+        <div id="userDetailsContent"></div>
+    </div>
+</div>
+
+<script>
+    // --- CONFIGURARE ASCUNDERE UTILIZATORI ---
+    // Adaugă aici username-ul celui pe care vrei să îl ascunzi. Exemplu: ["secret_user", "test_user"]
+    const HIDDEN_USERS = ["admin"]; 
+
+    const SB_URL = "https://urjuiyjjzcyqcovljche.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVyanVpeWpqemN5cWNvdmxqY2hlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MDcyMDgsImV4cCI6MjA4Njk4MzIwOH0.ZIzjrs3blK89vMu5JFH5N0EtNZmyaUkLwi-03CXZo6w";
+
+    let users = [], matches = [], logs = [], currentUser = null;
+
+    function showToast() {
+        const t = document.getElementById("toast");
+        t.className = "show";
+        setTimeout(() => { t.className = t.className.replace("show", ""); }, 2000);
+    }
+
+    async function loadFromCloud() {
+        try {
+            const res = await fetch(`${SB_URL}/rest/v1/date_pariuri?id=eq.1&select=continut`, { 
+                headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } 
+            });
+            const d = await res.json();
+            if (d && d.length > 0) {
+                const record = d[0].continut;
+                users = record.users || [];
+                matches = record.matches || [];
+                logs = record.logs || [];
+                document.getElementById('cloudStatus').innerText = "✅ Conectat";
+                checkPersistentLogin();
+                if(currentUser) showApp();
+            } else {
+                document.getElementById('cloudStatus').innerText = "⚠️ Tabel gol";
+            }
+        } catch (e) { 
+            console.error(e);
+            document.getElementById('cloudStatus').innerText = "❌ Eroare Conectare"; 
+        }
+    }
+
+    async function saveToCloud(msg) {
+        if (msg) {
+            logs.unshift(`[${new Date().toLocaleString('ro-RO')}] ${msg}`);
+            if (logs.length > 100) logs = logs.slice(0, 100);
+        }
+        try {
+            await fetch(`${SB_URL}/rest/v1/date_pariuri?id=eq.1`, {
+                method: 'PATCH',
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'apikey': SB_KEY,
+                    'Authorization': `Bearer ${SB_KEY}`,
+                    'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({ continut: { users, matches, logs } })
+            });
+            calculateScores();
+            updateAdminUserList();
+        } catch (e) { console.error("Eroare salvare Supabase", e); }
+    }
+
+    function checkPersistentLogin() {
+        const saved = localStorage.getItem('betAppUser');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            const found = users.find(u => u.username === parsed.u && u.password === parsed.p);
+            if (found) currentUser = found;
+        }
+    }
+
+    function handleLogin() {
+        const u = document.getElementById('loginUser').value;
+        const p = document.getElementById('loginPass').value;
+        const found = users.find(x => x.username === u && x.password === p);
+        if(found) {
+            currentUser = found;
+            if(document.getElementById('rememberMe').checked) localStorage.setItem('betAppUser', JSON.stringify({u, p}));
+            showApp();
+        } else alert("Date incorecte!");
+    }
+
+    function showApp() {
+        document.getElementById('authScreen').classList.add('hidden');
+        document.getElementById('appScreen').classList.remove('hidden');
+        document.getElementById('welcomeMsg').innerText = `Salut, ${currentUser.fullName}!`;
+        document.getElementById('displayFullUser').value = currentUser.fullName.toUpperCase();
+        setupInterface();
+    }
+
+    function handleLogout() { localStorage.removeItem('betAppUser'); location.reload(); }
+    function toggleAuth(isLogin) {
+        document.getElementById('loginFields').classList.toggle('hidden', !isLogin);
+        document.getElementById('registerFields').classList.toggle('hidden', isLogin);
+    }
+
+    async function handleRegister() {
+        const full = document.getElementById('regFull').value.trim();
+        const user = document.getElementById('regUser').value.trim();
+        const pass = document.getElementById('regPass').value;
+        if(!full || !user || !pass) return alert("Completează tot!");
+        users.push({ username: user, password: pass, fullName: full, role: "user", bets: {} });
+        await saveToCloud(`Utilizator nou: ${user}`);
+        alert("Succes!"); toggleAuth(true);
+    }
+
+    function setupInterface() {
+        const isAdmin = currentUser.role === "admin";
+        document.getElementById('adminUserSection').classList.toggle('hidden', !isAdmin);
+        document.getElementById('adminScoreSection').classList.toggle('hidden', !isAdmin);
+        if (isAdmin) updateAdminUserList();
+        const h = matches.map(m => `<option value="${m.id}">${m.id}. ${m.name}</option>`).join('');
+        document.getElementById('matchSelectAdmin').innerHTML = h;
+        document.getElementById('matchSelectUser').innerHTML = h;
+        calculateScores(); jumpToNext();
+    }
+
+    function updateAdminUserList() {
+        const listDiv = document.getElementById('manageUsersList');
+        if (!listDiv) return;
+        listDiv.innerHTML = users.map(u => `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid #eee; background: ${u.role==='admin'?'#f8f9fa':'white'}">
+                <span><strong>${u.fullName}</strong> (${u.username}) ${u.role==='admin'?'⭐':''}</span>
+                ${u.username !== currentUser.username ? `<button onclick="removeUser('${u.username}')" class="btn-danger" style="width:auto; padding:4px 10px; margin:0; font-size:11px;">Șterge</button>` : ''}
+            </div>`).join('');
+    }
+
+    async function removeUser(un) {
+        if (!confirm(`Sigur dorești să ștergi utilizatorul ${un}?`)) return;
+        users = users.filter(u => u.username !== un);
+        await saveToCloud(`ADMIN: Utilizator șters - ${un}`);
+        showToast();
+    }
+
+    async function placeBet() {
+        const mId = document.getElementById('matchSelectUser').value;
+        currentUser.bets[mId] = {
+            home: parseInt(document.getElementById('betHome').value) || 0,
+            away: parseInt(document.getElementById('betAway').value) || 0,
+            sign: document.getElementById('betSign').value,
+            penalty: document.getElementById('betPenalty').value
+        };
+        await saveToCloud(`${currentUser.username} a pariat la meciul ${mId}`);
+        showToast();
+        jumpToNext();
+    }
+
+    async function updateMatchResult() {
+        const mId = document.getElementById('matchSelectAdmin').value;
+        const m = matches.find(x => x.id == mId);
+        const h = parseInt(document.getElementById('realHome').value) || 0;
+        const a = parseInt(document.getElementById('realAway').value) || 0;
+        m.realScore = { home: h, away: a, sign: h>a?"1":h<a?"2":"X" };
+        m.realPenalty = document.getElementById('realPenalty').value;
+        await saveToCloud(`ADMIN: Scor setat ${m.name} (${h}-${a})`);
+        showToast();
+        jumpToNext();
+    }
+
+    function jumpToNext() {
+        const sA = document.getElementById('matchSelectAdmin');
+        for(let i=0; i<sA.options.length; i++) if(!matches.find(x => x.id == sA.options[i].value).realScore) { sA.selectedIndex = i; break; }
+        const sU = document.getElementById('matchSelectUser');
+        for(let i=0; i<sU.options.length; i++) if(!currentUser.bets[sU.options[i].value]) { sU.selectedIndex = i; break; }
+        checkAdminLock(); checkUserLock();
+    }
+
+    function checkAdminLock() {
+        const m = matches.find(x => x.id == document.getElementById('matchSelectAdmin').value);
+        document.getElementById('adminLocked').style.display = (m && m.realScore) ? 'flex' : 'none';
+        if(m && m.realScore) { document.getElementById('realHome').value = m.realScore.home; document.getElementById('realAway').value = m.realScore.away; document.getElementById('realPenalty').value = m.realPenalty; }
+    }
+
+    function checkUserLock() {
+        const b = currentUser.bets[document.getElementById('matchSelectUser').value];
+        document.getElementById('betLocked').style.display = b ? 'flex' : 'none';
+        if(b) { document.getElementById('betHome').value = b.home; document.getElementById('betAway').value = b.away; document.getElementById('betSign').value = b.sign; document.getElementById('betPenalty').value = b.penalty; }
+    }
+
+    function calculateScores() {
+        users.forEach(u => {
+            u.totalPoints = 0; u.scorePoints = 0; u.penaltyPoints = 0; u.signPoints = 0;
+            Object.keys(u.bets || {}).forEach(mId => {
+                const b = u.bets[mId], r = matches.find(m => m.id == mId);
+                if(r && r.realScore) {
+                    if(b.home === r.realScore.home && b.away === r.realScore.away) { u.scorePoints += 1; u.totalPoints += 3; }
+                    if(b.sign === r.realScore.sign) { u.signPoints += 1; u.totalPoints += 1; }
+                    if(b.penalty === r.realPenalty) { let p = (b.penalty==="DA"?2:1); u.penaltyPoints += 1; u.totalPoints += p; }
+                }
+            });
+        });
+        renderLeaderboard();
+    }
+
+    // MODIFICAT: Filtrare utilizatori ascunși în clasament
+    function renderLeaderboard() {
+        const sorted = users
+            .filter(u => !HIDDEN_USERS.includes(u.username))
+            .sort((a,b) => {
+                if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+                if (b.scorePoints !== a.scorePoints) return b.scorePoints - a.scorePoints;
+                return b.penaltyPoints - a.penaltyPoints;
+            });
+        document.querySelector('#leaderboard tbody').innerHTML = sorted.map((u, i) => `
+            <tr><td>${i+1}</td><td><span class="user-link" onclick="showUserDetails('${u.username}')">${u.fullName}</span></td><td><strong>${u.totalPoints}</strong></td><td>${u.scorePoints}</td><td>${u.signPoints}</td><td>${u.penaltyPoints}</td></tr>`).join('');
+    }
+
+    function showUserDetails(un) {
+        const u = users.find(x => x.username === un);
+        let h = `<h3>Analiză: ${u.fullName}</h3><button onclick="window.print()" class="no-print" style="background:#f39c12; margin-bottom:10px;">💾 Print/PDF</button><div class="table-responsive"><table class="user-analysis-table"><thead><tr><th class="blue-head">Meci</th><th class="blue-head">Real</th><th class="blue-head">Scor</th><th class="blue-head">Pron</th><th class="blue-head">Pen</th><th class="blue-head">Pts</th></tr></thead><tbody>`;
+        matches.forEach(m => {
+            const b = u.bets[m.id];
+            if(b) {
+                const r = m.realScore; let pts = 0, cS="", cP="", cPn="";
+                if(r) {
+                    if(b.home===r.home && b.away===r.away) { pts+=3; cS="win-cell"; }
+                    if(b.sign===r.sign) { pts+=1; cP="win-cell"; }
+                    if(b.penalty===m.realPenalty) { pts+=(b.penalty==="DA"?2:1); cPn="win-cell"; }
+                }
+                h += `<tr><td>${m.name}</td><td class="real-cell">${r?r.home+'-'+r.away:'?'}</td><td class="${cS}">${b.home}-${b.away}</td><td class="${cP}">${b.sign}</td><td class="${cPn}">${b.penalty}</td><td><strong>${pts}</strong></td></tr>`;
+            }
+        });
+        document.getElementById('userDetailsContent').innerHTML = h + "</tbody></table></div>";
+        document.getElementById('modal').style.display = "block";
+    }
+
+    // MODIFICAT: Filtrare utilizatori ascunși în raportul general de pariuri
+    function showFullReport() {
+        let h = "<h3>🔍 Raport Pariuri</h3><button onclick='window.print()' class='no-print' style='background:#f39c12; margin-bottom:10px;'>💾 Print/PDF</button><div class='table-responsive'><table><thead><tr class='blue-head'><th>User</th><th>Meci</th><th>Scor</th><th>Pron</th><th>Pen</th></tr></thead>";
+        users.filter(u => !HIDDEN_USERS.includes(u.username)).forEach(u => {
+            Object.keys(u.bets).forEach(mId => {
+                const m = matches.find(x => x.id == mId), b = u.bets[mId];
+                h += `<tr><td>${u.fullName}</td><td>${m.name}</td><td>${b.home}-${b.away}</td><td>${b.sign}</td><td>${b.penalty}</td></tr>`;
+            });
+        });
+        document.getElementById('userDetailsContent').innerHTML = h + "</table></div>";
+        document.getElementById('modal').style.display = 'block';
+    }
+
+    // MODIFICAT: Filtrare utilizatori ascunși în exportul de clasament
+    function exportFullClasament() {
+        let h = "<h3>🏆 Clasament General</h3><button onclick='window.print()' class='no-print' style='background:#f39c12; margin-bottom:10px;'>💾 Print/PDF</button><div class='table-responsive'><table><thead><tr class='blue-head'><th>Loc</th><th>Nume</th><th>Puncte</th><th>Scor</th><th>Pron</th><th>Pen</th></tr></thead>";
+        const sorted = users
+            .filter(u => !HIDDEN_USERS.includes(u.username))
+            .sort((a,b) => {
+                if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+                if (b.scorePoints !== a.scorePoints) return b.scorePoints - a.scorePoints;
+                return b.penaltyPoints - a.penaltyPoints;
+            });
+        sorted.forEach((u, i) => h += `<tr><td>${i+1}</td><td>${u.fullName}</td><td>${u.totalPoints}</td><td>${u.scorePoints}</td><td>${u.signPoints}</td><td>${u.penaltyPoints}</td></tr>`);
+        document.getElementById('userDetailsContent').innerHTML = h + "</table></div>";
+        document.getElementById('modal').style.display = 'block';
+    }
+
+    function searchUser() {
+        const f = document.getElementById('searchBox').value.toLowerCase();
+        document.querySelectorAll('#leaderboard tbody tr').forEach(r => r.style.display = r.cells[1].textContent.toLowerCase().includes(f) ? "" : "none");
+    }
+    function autoSelectSign() {
+        const h = parseInt(document.getElementById('betHome').value) || 0, a = parseInt(document.getElementById('betAway').value) || 0;
+        document.getElementById('betSign').value = h > a ? "1" : h < a ? "2" : "X";
+    }
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+    function showLogs() {
+        document.getElementById('userDetailsContent').innerHTML = "<h3>📜 Jurnal Activitate</h3>" + logs.map(l => `<div style="font-size:0.7rem; border-bottom:1px solid #eee; padding:3px;">${l}</div>`).join('');
+        document.getElementById('modal').style.display = 'block';
+    }
+    function showSavedScores() {
+        let h = "<h3>✅ Scoruri Reale</h3><div class='table-responsive'><table><thead><tr class='blue-head'><th>Meci</th><th>Scor</th><th>Pen</th></tr></thead>";
+        matches.filter(m => m.realScore).forEach(m => h += `<tr><td>${m.name}</td><td>${m.realScore.home}-${m.realScore.away}</td><td>${m.realPenalty}</td></tr>`);
+        document.getElementById('userDetailsContent').innerHTML = h + "</table></div>";
+        document.getElementById('modal').style.display = 'block';
+    }
+
+    loadFromCloud();
+</script>
+</body>
+</html>
+
